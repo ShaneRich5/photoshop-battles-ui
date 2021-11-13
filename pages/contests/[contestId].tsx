@@ -7,7 +7,9 @@ const ContestDetailPage = () => {
 
   return (
     <Layout>
-      <h1>Contest details: {contestId}</h1>
+      <div className="container mx-auto sm:px-6 lg:px-8">
+        <h1>Contest details: {contestId}</h1>
+      </div>
     </Layout>
   )
 }
