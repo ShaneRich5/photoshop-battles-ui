@@ -1,5 +1,4 @@
 import Layout from 'components/Layout'
-import { useCallback, useEffect, useState } from 'react'
 import { getContestList } from 'libs/api'
 import Link from 'next/link'
 import { Contest } from 'libs/contracts'
