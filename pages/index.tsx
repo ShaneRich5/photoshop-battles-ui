@@ -1,14 +1,14 @@
 import Layout from 'components/Layout'
 import { getContestList } from 'libs/api'
 import Link from 'next/link'
-import { Contest } from 'libs/contracts'
+import { Contest, ContestListResponse } from 'libs/contracts'
 import { useQuery } from 'react-query'
 import PageTitle from 'components/PageTitle'
 import PageContainer from 'components/PageContainer'
 import PageHeader from '../components/PageHeader'
 
 export default function Home() {
-  const { isLoading, error, data: contests } = useQuery(
+  const { isLoading, error, data: contests } = useQuery<ContestListResponse, Error>(
     'contest-list',
     getContestList
   )
@@ -20,7 +20,7 @@ export default function Home() {
           <PageTitle>/r/PhotoshopBattles</PageTitle>
         </PageHeader>
         {isLoading && <h3>Loading...</h3>}
-        {error && <h3>An error has occured: ' {error}</h3>}
+        {error && <h3>An error has occured: ' {error.message}</h3>}
         {contests && <ContestGrid contests={contests}/>}
       </PageContainer>
     </Layout>
