@@ -1,0 +1,1 @@
+export const IMGUR_ALBUM_URL = 'imgur.com/a/'

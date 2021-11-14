@@ -1,7 +1,14 @@
 import 'tailwindcss/tailwind.css'
+import { QueryClient, QueryClientProvider } from 'react-query'
 
-function MyApp({ Component, pageProps }) {
-  return <Component {...pageProps} />
+const queryClient = new QueryClient()
+
+function App({ Component, pageProps }) {
+  return (
+    <QueryClientProvider client={queryClient}>
+      <Component {...pageProps} />
+    </QueryClientProvider>
+  )
 }
 
-export default MyApp
+export default App
