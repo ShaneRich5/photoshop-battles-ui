@@ -1,3 +1,5 @@
+export const NOT_FOUND_INDEX = -1
+
 export const REDDIT_URL = 'https://www.reddit.com'
 
 export const IMGUR_ALBUM_URL = 'imgur.com/a/'

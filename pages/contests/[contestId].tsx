@@ -7,7 +7,7 @@ import { getPostDetail } from '../../libs/api'
 import { ContestDetailResponse, FormattedSubmission } from '../../libs/contracts'
 import SubmissionGrid from 'components/SubmissionGrid'
 import ImageDialog from 'components/ImageDialog'
-import { QueryKey, REDDIT_URL } from 'libs/constants'
+import { NOT_FOUND_INDEX, QueryKey, REDDIT_URL } from 'libs/constants'
 import ContestDetail from 'components/ContestDetail'
 import { GetServerSideProps } from 'next'
 import EmptySubmissionState from 'components/EmptySubmissionState'
@@ -73,7 +73,37 @@ const ContestDetailPage = () => {
   useEffect(() => {
     createFormattedSubmissions()
   }, [createFormattedSubmissions])
-  
+
+  const getCurrentSelectedSubmissionIndex = () => {
+    if (selectedEntity === null || formattedSubmissions === null) return null
+    return formattedSubmissions.findIndex(({ id }) => id === selectedEntity.id)
+  }
+
+  const openNextSubmission = () => {
+    const idx = getCurrentSelectedSubmissionIndex()
+    if (idx === null) return
+
+    let nextIdx = idx + 1
+
+    if (formattedSubmissions.length === nextIdx) {
+      nextIdx = 0
+    }
+
+    setSelectedEntity({ ...formattedSubmissions[nextIdx] })
+  }
+
+  const openPreviousSubmission = () => {
+    const idx = getCurrentSelectedSubmissionIndex()
+    if (idx === null) return
+
+    let previousIdx = idx - 1
+
+    if (previousIdx < 0) {
+      previousIdx = formattedSubmissions.length - 1
+    }
+
+    setSelectedEntity({ ...formattedSubmissions[previousIdx] })
+  }
 
   return (
     <Layout>
@@ -86,6 +116,8 @@ const ContestDetailPage = () => {
               open={selectedEntity !== null}
               setOpen={() => setSelectedEntity(null)}
               submission={selectedEntity}
+              onNextClick={() => openNextSubmission()}
+              onPreviousClick={() => openPreviousSubmission()}
             />
             <ContestDetail contest={data.contest}/>
             <div className="pt-4">
