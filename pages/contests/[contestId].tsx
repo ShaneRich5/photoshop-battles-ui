@@ -7,7 +7,7 @@ import { getPostDetail } from '../../libs/api'
 import { ContestDetailResponse, FormattedSubmission } from '../../libs/contracts'
 import SubmissionGrid from 'components/SubmissionGrid'
 import ImageDialog from 'components/ImageDialog'
-import { QueryKey } from 'libs/constants'
+import { QueryKey, REDDIT_URL } from 'libs/constants'
 import ContestDetail from 'components/ContestDetail'
 import { GetServerSideProps } from 'next'
 import EmptySubmissionState from 'components/EmptySubmissionState'
@@ -93,7 +93,7 @@ const ContestDetailPage = () => {
                 ? <h4>Rendering submissions</h4>
                 : <Fragment>
                     {formattedSubmissions.length === 0 &&
-                      <EmptySubmissionState/>
+                      <EmptySubmissionState submissionLink={REDDIT_URL + data.contest.permalink}/>
                     }
                     <SubmissionGrid
                       submissions={formattedSubmissions}

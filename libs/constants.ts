@@ -1,3 +1,5 @@
+export const REDDIT_URL = 'https://www.reddit.com'
+
 export const IMGUR_ALBUM_URL = 'imgur.com/a/'
 
 export const URL_WRAPPER_EXPRESSION = /\(.*?\)/

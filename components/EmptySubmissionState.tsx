@@ -1,9 +1,13 @@
-import { PlusIcon } from '@heroicons/react/solid'
+interface EmptySubmissionStateProps {
+  submissionLink: string
+}
 
-const EmptySubmissionState = () => {
+const EmptySubmissionState: React.FC<EmptySubmissionStateProps> = ({ submissionLink }) => {
   return (
-    <button
+    <a
       type="button"
+      target="_blank"
+      href={submissionLink}
       className="relative block w-full border-2 border-gray-300 border-dashed rounded-lg p-12 text-center hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
     >
       <svg xmlns="http://www.w3.org/2000/svg" className="mx-auto h-12 w-12 text-gray-400" viewBox="0 0 512 512">
@@ -30,7 +34,7 @@ const EmptySubmissionState = () => {
       </svg>
       <h3 className="mt-2 text-sm font-medium text-gray-900">We were not able to load any submissions for this contest</h3>
       <span className="mt-1 text-sm text-gray-500">Click here to submit an entry!</span>
-    </button>
+    </a>
   )
 }
 
