@@ -1,7 +1,7 @@
 import Layout from 'components/Layout'
 import { useRouter } from 'next/dist/client/router'
-import { Fragment, useState } from 'react'
-import { useQuery } from 'react-query'
+import { Fragment, useCallback, useEffect, useState } from 'react'
+import { dehydrate, QueryClient, useQuery } from 'react-query'
 import PageContainer from '../../components/PageContainer'
 import { getPostDetail } from '../../libs/api'
 import { ContestDetailResponse, FormattedSubmission } from '../../libs/contracts'
@@ -9,6 +9,22 @@ import SubmissionGrid from 'components/SubmissionGrid'
 import ImageDialog from 'components/ImageDialog'
 import { QueryKey } from 'libs/constants'
 import ContestDetail from 'components/ContestDetail'
+import { GetServerSideProps } from 'next'
+import EmptySubmissionState from 'components/EmptySubmissionState'
+import { convertImgurAlbumSubmissionToDirectLink, convertImgurDirectSubmissionToDirectLink, convertImgurGallerySubmissionToDirectLink, generateUrlType, parseImageUrlFromCommentBody, parseTextFromCommentBody } from 'libs/utils'
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const contestId = context.params.contestId as string
+  const queryClient = new QueryClient()
+ 
+  await queryClient.prefetchQuery(QueryKey.CONTEST_DETAILS, () => getPostDetail(contestId))
+
+  return {
+    props: {
+      dehydratedState: dehydrate(queryClient),
+    },
+  }
+}
 
 const ContestDetailPage = () => {
   const router = useRouter()
@@ -19,6 +35,45 @@ const ContestDetailPage = () => {
     QueryKey.CONTEST_DETAILS,
     () => getPostDetail(contestId)
   )
+
+  const [formattedSubmissions, setFormattedSubmissions] = useState<FormattedSubmission[] | null>(null)
+  
+  const createFormattedSubmissions = useCallback(async () => {
+    const promises = data.submissions.map((submission) => {
+      const title = parseTextFromCommentBody(submission.body)
+      const imageUrl = parseImageUrlFromCommentBody(submission.body)
+      const urlType = generateUrlType(title, imageUrl)
+
+      const formattedSubmission: FormattedSubmission = {
+        ...submission,
+        title,
+        imageUrl,
+        urlType,
+      }
+
+      switch (urlType) {
+        case 'direct-link':
+          return Promise.resolve(formattedSubmission)
+        case 'imgur-direct':
+          return convertImgurDirectSubmissionToDirectLink(formattedSubmission)
+        case 'imgur-album':
+          return convertImgurAlbumSubmissionToDirectLink(formattedSubmission)
+        case 'imgur-gallery':
+          return convertImgurGallerySubmissionToDirectLink(formattedSubmission)
+        default:
+          return Promise.resolve(formattedSubmission)
+      }
+    })
+
+    const results = await Promise.all(promises)
+
+    setFormattedSubmissions(results.filter(({ urlType }) => urlType !== null))
+  }, [data.submissions])
+
+  useEffect(() => {
+    createFormattedSubmissions()
+  }, [createFormattedSubmissions])
+  
 
   return (
     <Layout>
@@ -34,10 +89,18 @@ const ContestDetailPage = () => {
             />
             <ContestDetail contest={data.contest}/>
             <div className="pt-4">
-              <SubmissionGrid
-                submissions={data.submissions.splice(1)}
-                onSubmissionClick={(submission) => setSelectedEntity(submission)}
-              />
+              {formattedSubmissions === null
+                ? <h4>Rendering submissions</h4>
+                : <Fragment>
+                    {formattedSubmissions.length === 0 &&
+                      <EmptySubmissionState/>
+                    }
+                    <SubmissionGrid
+                      submissions={formattedSubmissions}
+                      onSubmissionClick={(submission) => setSelectedEntity(submission)}
+                    />
+                  </Fragment>
+              }
             </div>
           </Fragment>
         }

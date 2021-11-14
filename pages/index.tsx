@@ -8,7 +8,7 @@ import PageContainer from 'components/PageContainer'
 import PageHeader from '../components/PageHeader'
 import { QueryKey } from 'libs/constants'
 
-export async function getStaticProps() {
+export async function getServerSideProps() {
   const queryClient = new QueryClient()
 
   await queryClient.prefetchQuery(QueryKey.CONTEST_LIST, getContestList)

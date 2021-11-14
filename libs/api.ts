@@ -64,6 +64,7 @@ export const getPostDetail = async (postId: string): Promise<ContestDetailRespon
       permalink: comment.permalink,
       upvoteCount: comment.ups,
     }))
+    .slice(1)
 
   return { contest, submissions }
 }
