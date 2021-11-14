@@ -1,5 +1,9 @@
 import React from 'react'
 import Head from 'next/head'
+import PageContainer from './PageContainer'
+import PageTitle from './PageTitle'
+import PageHeader from './PageHeader'
+import Link from 'next/link'
 
 const Layout: React.FC = ({ children }) => {
   return (
@@ -15,6 +19,11 @@ const Layout: React.FC = ({ children }) => {
         <meta name="theme-color" content="#ffffff" key="theme-color"/>
       </Head>
       <div className="pb-6">
+        <PageContainer>
+          <PageHeader>
+            <PageTitle><Link href="/">/r/PhotoshopBattles</Link></PageTitle>
+          </PageHeader>
+        </PageContainer>
         {children}
       </div>
     </React.Fragment>

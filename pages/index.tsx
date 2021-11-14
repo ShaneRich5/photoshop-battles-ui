@@ -16,9 +16,6 @@ export default function Home() {
   return (
     <Layout>
       <PageContainer>
-        <PageHeader>
-          <PageTitle>/r/PhotoshopBattles</PageTitle>
-        </PageHeader>
         {isLoading && <h3>Loading...</h3>}
         {error && <h3>An error has occured: ' {error.message}</h3>}
         {contests && <ContestGrid contests={contests}/>}
