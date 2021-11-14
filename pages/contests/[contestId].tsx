@@ -4,7 +4,7 @@ import { Fragment, useCallback, useEffect, useState } from 'react'
 import { dehydrate, QueryClient, useQuery } from 'react-query'
 import PageContainer from '../../components/PageContainer'
 import { getPostDetail } from '../../libs/api'
-import { ContestDetailResponse, FormattedSubmission } from '../../libs/contracts'
+import { ContestDetailResponse, FormattedSubmission, Previewable } from '../../libs/contracts'
 import SubmissionGrid from 'components/SubmissionGrid'
 import ImageDialog from 'components/ImageDialog'
 import { NOT_FOUND_INDEX, QueryKey, REDDIT_URL } from 'libs/constants'
@@ -29,7 +29,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 const ContestDetailPage = () => {
   const router = useRouter()
   const contestId = router.query.contestId as string
-  const [selectedEntity, setSelectedEntity] = useState<FormattedSubmission | null>(null)
+  const [selectedEntity, setSelectedEntity] = useState<Previewable | null>(null)
 
   const { isLoading, error, data } = useQuery<ContestDetailResponse, Error>(
     QueryKey.CONTEST_DETAILS,
@@ -74,36 +74,44 @@ const ContestDetailPage = () => {
     createFormattedSubmissions()
   }, [createFormattedSubmissions])
 
-  const getCurrentSelectedSubmissionIndex = () => {
+  const getCurrentSelectedSubmissionIndex = useCallback(() => {
+    console.log('selectedEntity:', selectedEntity, 'formattedSubmissions:', formattedSubmissions)
     if (selectedEntity === null || formattedSubmissions === null) return null
     return formattedSubmissions.findIndex(({ id }) => id === selectedEntity.id)
-  }
+  }, [formattedSubmissions, selectedEntity])
 
-  const openNextSubmission = () => {
+  const openNextSubmission = useCallback(() => {
     const idx = getCurrentSelectedSubmissionIndex()
+    
     if (idx === null) return
 
     let nextIdx = idx + 1
 
     if (formattedSubmissions.length === nextIdx) {
-      nextIdx = 0
+      setSelectedEntity({ ...data.contest })
+      return
     }
 
     setSelectedEntity({ ...formattedSubmissions[nextIdx] })
-  }
+  }, [formattedSubmissions, getCurrentSelectedSubmissionIndex])
 
-  const openPreviousSubmission = () => {
+  const openPreviousSubmission = useCallback(() => {
     const idx = getCurrentSelectedSubmissionIndex()
     if (idx === null) return
 
     let previousIdx = idx - 1
 
-    if (previousIdx < 0) {
+    if (previousIdx === -1) {
+      setSelectedEntity({ ...data.contest })
+      return
+    }
+
+    if (previousIdx < -1) {
       previousIdx = formattedSubmissions.length - 1
     }
 
     setSelectedEntity({ ...formattedSubmissions[previousIdx] })
-  }
+  }, [formattedSubmissions, getCurrentSelectedSubmissionIndex])
 
   return (
     <Layout>
@@ -119,7 +127,7 @@ const ContestDetailPage = () => {
               onNextClick={() => openNextSubmission()}
               onPreviousClick={() => openPreviousSubmission()}
             />
-            <ContestDetail contest={data.contest}/>
+            <ContestDetail contest={data.contest} onContestImageClick={() => setSelectedEntity({ ...data.contest })} />
             <div className="pt-4">
               {formattedSubmissions === null
                 ? <h4>Rendering submissions</h4>

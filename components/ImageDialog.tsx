@@ -1,12 +1,11 @@
 import { Fragment, useRef, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
-import { ExclamationIcon } from '@heroicons/react/outline'
-import { FormattedSubmission } from 'libs/contracts'
+import { Previewable } from 'libs/contracts'
 
 interface ImageDialogProps {
   open: boolean
   setOpen: (value: boolean) => void
-  submission: FormattedSubmission | null
+  submission: Previewable | null
   onNextClick: () => void
   onPreviousClick: () => void
 }

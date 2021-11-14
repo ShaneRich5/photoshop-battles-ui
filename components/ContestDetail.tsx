@@ -3,12 +3,13 @@ import PageTitle from "./PageTitle"
 
 interface ContestDetailProps {
   contest: Contest
+  onContestImageClick: () => void
 }
 
-const ContestDetail: React.FC<ContestDetailProps> = ({ contest }) => (
+const ContestDetail: React.FC<ContestDetailProps> = ({ contest, onContestImageClick }) => (
   <div>
     <div className="flex">
-      <div className="w-6/12">
+      <div className="w-6/12" onClick={onContestImageClick}>
         <img src={contest.imageUrl} className="shadow-lg rounded max-w-full h-auto align-middle border-none"/>
       </div>
       <div className="px-2 flex flex-col justify-center items-center">

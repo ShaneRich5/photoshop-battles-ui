@@ -33,3 +33,5 @@ export interface ContestDetailResponse {
   contest: Contest
   submissions: Submission[]
 }
+
+export type Previewable = FormattedSubmission | Contest
