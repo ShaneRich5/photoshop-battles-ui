@@ -15,6 +15,18 @@ export interface Submission {
   upvoteCount: number
 }
 
+export type DirectLink = 'direct-link'
+export type ImgurAlbum = 'imgur-album'
+export type ImgurGallery = 'imgur-gallery'
+export type ImgurDirect = 'imgur-direct'
+export type SubmissionUrlType = DirectLink | ImgurAlbum | ImgurGallery | ImgurDirect | null
+
+export interface FormattedSubmission extends Submission {
+  title: string
+  imageUrl: string
+  urlType: SubmissionUrlType
+}
+
 export type ContestListResponse = Contest[]
 
 export interface ContestDetailResponse {
