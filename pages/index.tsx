@@ -36,7 +36,12 @@ const ContestGrid: React.FC<ContestGridProps> = ({ contests }) => (
     {contests.map((contest: Contest) => (
       <li key={contest.id} className="relative">
         <div className="group block w-full aspect-w-10 aspect-h-7 rounded-lg bg-gray-100 focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-offset-gray-100 focus-within:ring-indigo-500 overflow-hidden">
-          <img src={contest.imageUrl} alt="contest image" className="object-cover pointer-events-none group-hover:opacity-75"/>
+          <img
+            src={contest.imageUrl}
+            alt="contest image"
+            className="object-cover pointer-events-none group-hover:opacity-75"
+            referrerPolicy="no-referrer"
+          />
           <Link href={`contests/${contest.id}`}>
             <a type="button" className="absolute inset-0 focus:outline-none">
               <span className="sr-only">View details for {contest.title}</span>
