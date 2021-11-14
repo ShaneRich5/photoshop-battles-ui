@@ -7,7 +7,6 @@ import PageHeader from '../../components/PageHeader'
 import PageTitle from '../../components/PageTitle'
 import { getAlbumImageUrl, getGalleryImageUrl, getPostDetail, getSingleImageUrl } from '../../libs/api'
 import { Contest, ContestDetailResponse, Submission } from '../../libs/contracts'
-import Link from 'next/link'
 import { parseTextFromCommentBody, parseImageUrlFromCommentBody, checkForValidImageExtension } from 'libs/utils'
 
 const ContestDetailPage = () => {
@@ -163,45 +162,9 @@ const SubmissionGrid: React.FC<SubmissionGridProps> = ({ submissions }) => {
               referrerPolicy="no-referrer"
             />
           </div>
-          
-          {/* <div className="group block w-full aspect-w-10 aspect-h-7 rounded-lg bg-gray-100 focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-offset-gray-100 focus-within:ring-indigo-500 overflow-hidden">
-            <SubmissionImage commentBody={submission.body}/>
-            <Link href={`submissions/${submission.id}`}>
-              <a type="button" className="absolute inset-0 focus:outline-none">
-                <span className="sr-only">View details for {submission.id}</span>
-              </a>
-            </Link>
-          </div> */}
-          
         </li>
       ))}
     </ul>
-  )
-}
-
-interface SubmissionImageProps {
-  commentBody: string
-}
-
-type NullableString = string | null
-
-const SubmissionImage: React.FC<SubmissionImageProps> = ({ commentBody }) => {
-  const PLACEHOLDER_IMAGE_URL = "https://images.unsplash.com/photo-1507207611509-ec012433ff52?ixlib=rb-1.2.1&ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&auto=format&fit=crop&w=934&q=80"
-  
-  const [text, setText] = useState<NullableString>(null)
-  const [imageUrl, setImageUrl] = useState<NullableString>(PLACEHOLDER_IMAGE_URL)
-
-  const parseContentFromCommentBody = useCallback(() => {
-    setText(parseTextFromCommentBody(commentBody))
-    setImageUrl(parseImageUrlFromCommentBody(commentBody))
-  }, [])
-
-  useEffect(() => {
-    parseContentFromCommentBody()
-  }, [parseContentFromCommentBody])
-
-  return (
-    <img src={imageUrl} alt="submission image" className="object-cover pointer-events-none group-hover:opacity-75"/>
   )
 }
 
