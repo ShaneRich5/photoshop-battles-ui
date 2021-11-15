@@ -1,14 +1,17 @@
 import Link from 'next/link'
 import Layout from 'components/Layout'
 import { getContestList } from 'libs/api'
-import { QueryKey } from 'libs/constants'
+import { QueryKey, SCROLL_EVENT } from 'libs/constants'
 import PageTitle from 'components/PageTitle'
 import RedditIcon from 'components/RedditIcon'
 import PageHeader from '../components/PageHeader'
 import { PlusIcon } from '@heroicons/react/solid'
 import PageContainer from 'components/PageContainer'
 import { Contest, ContestListResponse } from 'libs/contracts'
-import { dehydrate, QueryClient, useQuery } from 'react-query'
+import { dehydrate, QueryClient, useInfiniteQuery, useQuery } from 'react-query'
+import { useCallback, useEffect } from 'react'
+import { debounce } from 'libs/utils'
+import LoadingIndicator from 'components/LoadingIndicator'
 
 export async function getServerSideProps() {
   const queryClient = new QueryClient()
@@ -23,10 +26,27 @@ export async function getServerSideProps() {
 }
 
 export default function Home() {
-  const { isLoading, error, data: contests } = useQuery<ContestListResponse, Error>(
+  const { isFetching, isFetchingNextPage, fetchNextPage, error, data: { pages } } = useInfiniteQuery<ContestListResponse, Error>(
     QueryKey.CONTEST_LIST,
-    getContestList
+    getContestList,
+    {
+      getNextPageParam: (lastPage) => `t3_${lastPage[lastPage.length - 1].id}`
+    }
   )
+
+  const handlePageScroll = useCallback(debounce(() => {
+    const isAtBottomOfPage = (window.innerHeight + window.scrollY) >= document.body.offsetHeight
+    
+    if (isAtBottomOfPage) {
+      fetchNextPage()
+    }
+  }, 500), [fetchNextPage])
+  
+  useEffect(() => {
+    window.addEventListener(SCROLL_EVENT, handlePageScroll)
+
+    return () => window.removeEventListener(SCROLL_EVENT, handlePageScroll)
+  }, [handlePageScroll])
 
   return (
     <Layout>
@@ -52,9 +72,13 @@ export default function Home() {
             </a>
           </div>
         </PageHeader>
-        {isLoading && <h3>Loading...</h3>}
         {error && <h3>An error has occured: ' {error.message}</h3>}
-        {contests && <ContestGrid contests={contests}/>}
+        {pages && <ContestGrid contests={[].concat(...pages)}/>}
+        {(isFetching || isFetchingNextPage) && 
+          <div className="flex justify-center items-center my-4">
+            <LoadingIndicator/>
+          </div>
+        }
       </PageContainer>
     </Layout>
   )

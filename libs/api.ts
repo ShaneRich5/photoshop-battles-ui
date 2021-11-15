@@ -40,8 +40,8 @@ const parsePostToContest = (post: any): Contest => ({
   permalink: post.permalink,
 })
 
-export const getContestList = async (): Promise<ContestListResponse> => {
-  const response = await redditApi.get('/' + JSON_EXTENSION)
+export const getContestList = async ({ pageParam = null }): Promise<ContestListResponse> => {
+  const response = await redditApi.get(`/${JSON_EXTENSION}?after=${pageParam}`)
   const { data: { data: { children } } } = response
   
   return children.map(({ data }) => data)

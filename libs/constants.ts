@@ -13,6 +13,7 @@ export enum QueryKey {
 }
 
 export const KEY_DOWN_EVENT = 'keydown'
+export const SCROLL_EVENT = 'scroll'
 
 export enum KeyDown {
   ARROW_LEFT = 'ArrowLeft',
