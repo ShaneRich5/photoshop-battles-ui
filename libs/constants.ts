@@ -11,3 +11,10 @@ export enum QueryKey {
   CONTEST_LIST = 'contest-list',
   CONTEST_DETAILS = 'contest-details',
 }
+
+export const KEY_DOWN_EVENT = 'keydown'
+
+export enum KeyDown {
+  ARROW_LEFT = 'ArrowLeft',
+  ARROW_RIGHT = 'ArrowRight',
+}

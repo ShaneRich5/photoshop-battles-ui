@@ -1,17 +1,31 @@
-import Layout from 'components/Layout'
+import Link from 'next/link'
+import { GetServerSideProps } from 'next'
 import { useRouter } from 'next/dist/client/router'
-import { Fragment, useCallback, useEffect, useState } from 'react'
 import { dehydrate, QueryClient, useQuery } from 'react-query'
-import PageContainer from '../../components/PageContainer'
-import { getPostDetail } from '../../libs/api'
-import { ContestDetailResponse, FormattedSubmission, Previewable } from '../../libs/contracts'
+import { Fragment, useCallback, useEffect, useState } from 'react'
+import Layout from 'components/Layout'
+import PageContainer from 'components/PageContainer'
+import { getPostDetail } from 'libs/api'
 import SubmissionGrid from 'components/SubmissionGrid'
 import ImageDialog from 'components/ImageDialog'
-import { NOT_FOUND_INDEX, QueryKey, REDDIT_URL } from 'libs/constants'
+import { QueryKey, REDDIT_URL } from 'libs/constants'
 import ContestDetail from 'components/ContestDetail'
-import { GetServerSideProps } from 'next'
 import EmptySubmissionState from 'components/EmptySubmissionState'
-import { convertImgurAlbumSubmissionToDirectLink, convertImgurDirectSubmissionToDirectLink, convertImgurGallerySubmissionToDirectLink, generateUrlType, parseImageUrlFromCommentBody, parseTextFromCommentBody } from 'libs/utils'
+import PageTitle from 'components/PageTitle'
+import PageHeader from 'components/PageHeader'
+import {
+  ContestDetailResponse,
+  FormattedSubmission,
+  Previewable
+} from 'libs/contracts'
+import {
+  convertImgurAlbumSubmissionToDirectLink,
+  convertImgurDirectSubmissionToDirectLink,
+  convertImgurGallerySubmissionToDirectLink,
+  generateUrlType, parseImageUrlFromCommentBody,
+  parseTextFromCommentBody
+} from 'libs/utils'
+import SubmissionLoadState from 'components/SubmissionLoadState'
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const contestId = context.params.contestId as string
@@ -75,7 +89,6 @@ const ContestDetailPage = () => {
   }, [createFormattedSubmissions])
 
   const getCurrentSelectedSubmissionIndex = useCallback(() => {
-    console.log('selectedEntity:', selectedEntity, 'formattedSubmissions:', formattedSubmissions)
     if (selectedEntity === null || formattedSubmissions === null) return null
     return formattedSubmissions.findIndex(({ id }) => id === selectedEntity.id)
   }, [formattedSubmissions, selectedEntity])
@@ -127,10 +140,13 @@ const ContestDetailPage = () => {
               onNextClick={() => openNextSubmission()}
               onPreviousClick={() => openPreviousSubmission()}
             />
+            <PageHeader>
+          <PageTitle><Link href="/">/r/PhotoshopBattles</Link></PageTitle>
+        </PageHeader>
             <ContestDetail contest={data.contest} onContestImageClick={() => setSelectedEntity({ ...data.contest })} />
             <div className="pt-4">
               {formattedSubmissions === null
-                ? <h4>Rendering submissions</h4>
+                ? <SubmissionGridLoadingState/>
                 : <Fragment>
                     {formattedSubmissions.length === 0 &&
                       <EmptySubmissionState submissionLink={REDDIT_URL + data.contest.permalink}/>
@@ -149,5 +165,14 @@ const ContestDetailPage = () => {
   )
 }
 
+const SubmissionGridLoadingState = () =>
+  <ul role="list" className="grid grid-cols-2 gap-x-4 gap-y-8 sm:grid-cols-3 sm:gap-x-6 lg:grid-cols-4 xl:gap-x-8">
+    <li>
+      <SubmissionLoadState/>
+      <SubmissionLoadState/>
+      <SubmissionLoadState/>
+      <SubmissionLoadState/>
+    </li>
+  </ul>
 
 export default ContestDetailPage

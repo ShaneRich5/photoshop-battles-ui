@@ -1,12 +1,14 @@
+import Link from 'next/link'
 import Layout from 'components/Layout'
 import { getContestList } from 'libs/api'
-import Link from 'next/link'
+import { QueryKey } from 'libs/constants'
+import PageTitle from 'components/PageTitle'
+import RedditIcon from 'components/RedditIcon'
+import PageHeader from '../components/PageHeader'
+import { PlusIcon } from '@heroicons/react/solid'
+import PageContainer from 'components/PageContainer'
 import { Contest, ContestListResponse } from 'libs/contracts'
 import { dehydrate, QueryClient, useQuery } from 'react-query'
-import PageTitle from 'components/PageTitle'
-import PageContainer from 'components/PageContainer'
-import PageHeader from '../components/PageHeader'
-import { QueryKey } from 'libs/constants'
 
 export async function getServerSideProps() {
   const queryClient = new QueryClient()
@@ -29,6 +31,27 @@ export default function Home() {
   return (
     <Layout>
       <PageContainer>
+        <PageHeader>
+          <PageTitle><Link href="/">/r/PhotoshopBattles</Link></PageTitle>
+          <div className="flex space-x-2">
+            <a
+              type="button"
+              target="_blank"
+              href="https://www.reddit.com/r/photoshopbattles/submit"
+              className="hidden sm:inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+            >
+              <PlusIcon className="-ml-1 mr-2 h-5 w-5 text-gray-500" aria-hidden="true" />
+              Contest
+            </a>
+            <a
+              href="https://www.reddit.com/r/photoshopbattles/"
+              target="_blank"
+              className="relative inline"
+            >
+              <RedditIcon/>
+            </a>
+          </div>
+        </PageHeader>
         {isLoading && <h3>Loading...</h3>}
         {error && <h3>An error has occured: ' {error.message}</h3>}
         {contests && <ContestGrid contests={contests}/>}
@@ -42,7 +65,7 @@ interface ContestGridProps {
 }
 
 const ContestGrid: React.FC<ContestGridProps> = ({ contests }) => (
-  <ul role="list" className="grid grid-cols-2 gap-x-4 gap-y-8 sm:grid-cols-3 sm:gap-x-6 lg:grid-cols-4 xl:gap-x-8">
+  <ul role="list" className="grid grid-cols-2 xs:grid-cols-2 gap-x-4 gap-y-8 sm:grid-cols-3 sm:gap-x-6 lg:grid-cols-4 xl:gap-x-8">
     {contests.map((contest: Contest) => (
       <li key={contest.id} className="relative">
         <div className="">

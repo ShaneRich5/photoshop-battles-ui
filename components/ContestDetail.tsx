@@ -1,5 +1,5 @@
+import { REDDIT_URL } from "libs/constants"
 import { Contest } from "libs/contracts"
-import PageTitle from "./PageTitle"
 
 interface ContestDetailProps {
   contest: Contest
@@ -14,7 +14,9 @@ const ContestDetail: React.FC<ContestDetailProps> = ({ contest, onContestImageCl
       </div>
       <div className="px-2 flex flex-col justify-center items-center">
         <div className="w-full">
-          <PageTitle>{contest.title}</PageTitle>
+          <a href={REDDIT_URL + contest.permalink} target="_blank">
+            <h3 className="text-2xl font-bold leading-7 text-gray-500 sm:text-3xl">{contest.title}</h3>
+          </a>
           <h4 className="text-base font-semibold leading-7 text-gray-700 sm:truncate">by {contest.author}</h4>
         </div>
       </div>

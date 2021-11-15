@@ -1,6 +1,6 @@
 import 'tailwindcss/tailwind.css'
-import { Hydrate, QueryClient, QueryClientProvider } from 'react-query'
 import { useState } from 'react'
+import { Hydrate, QueryClient, QueryClientProvider } from 'react-query'
 
 
 export default function App({ Component, pageProps }) {

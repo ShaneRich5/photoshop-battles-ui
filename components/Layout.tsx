@@ -20,11 +20,6 @@ const Layout: React.FC = ({ children }) => {
         <meta name="theme-color" content="#ffffff" key="theme-color"/>
       </Head>
       <div className="pb-6">
-        <PageContainer>
-          <PageHeader>
-            <PageTitle><Link href="/">/r/PhotoshopBattles</Link></PageTitle>
-          </PageHeader>
-        </PageContainer>
         {children}
       </div>
     </React.Fragment>

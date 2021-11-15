@@ -1,7 +1,4 @@
-import { getAlbumImageUrl, getGalleryImageUrl, getSingleImageUrl } from "libs/api"
-import { FormattedSubmission, Submission, SubmissionUrlType } from "libs/contracts"
-import { checkForValidImageExtension, parseImageUrlFromCommentBody, parseTextFromCommentBody } from "libs/utils"
-import { useCallback, useEffect, useState } from "react"
+import { FormattedSubmission } from "libs/contracts"
 
 interface SubmissionGridProps {
   submissions: FormattedSubmission[]
