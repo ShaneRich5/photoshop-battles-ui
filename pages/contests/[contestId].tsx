@@ -1,18 +1,19 @@
 import Link from 'next/link'
-import { GetServerSideProps } from 'next'
-import { useRouter } from 'next/dist/client/router'
-import { dehydrate, QueryClient, useQuery } from 'react-query'
-import { Fragment, useCallback, useEffect, useState } from 'react'
 import Layout from 'components/Layout'
-import PageContainer from 'components/PageContainer'
 import { getPostDetail } from 'libs/api'
-import SubmissionGrid from 'components/SubmissionGrid'
-import ImageDialog from 'components/ImageDialog'
-import { QueryKey, REDDIT_URL } from 'libs/constants'
-import ContestDetail from 'components/ContestDetail'
-import EmptySubmissionState from 'components/EmptySubmissionState'
+import { GetServerSideProps } from 'next'
 import PageTitle from 'components/PageTitle'
 import PageHeader from 'components/PageHeader'
+import ImageDialog from 'components/ImageDialog'
+import { useRouter } from 'next/dist/client/router'
+import PageContainer from 'components/PageContainer'
+import ContestDetail from 'components/ContestDetail'
+import { QueryKey, REDDIT_URL } from 'libs/constants'
+import SubmissionGrid from 'components/SubmissionGrid'
+import { dehydrate, QueryClient, useQuery } from 'react-query'
+import SubmissionLoadState from 'components/SubmissionLoadState'
+import { Fragment, useCallback, useEffect, useState } from 'react'
+import EmptySubmissionState from 'components/EmptySubmissionState'
 import {
   ContestDetailResponse,
   FormattedSubmission,
@@ -25,14 +26,13 @@ import {
   generateUrlType, parseImageUrlFromCommentBody,
   parseTextFromCommentBody
 } from 'libs/utils'
-import SubmissionLoadState from 'components/SubmissionLoadState'
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const contestId = context.params.contestId as string
   const queryClient = new QueryClient()
- 
-  await queryClient.prefetchQuery(QueryKey.CONTEST_DETAILS, () => getPostDetail(contestId))
 
+  await queryClient.prefetchQuery(QueryKey.CONTEST_DETAILS, () => getPostDetail(contestId))
+  
   return {
     props: {
       dehydratedState: dehydrate(queryClient),

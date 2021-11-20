@@ -1,4 +1,4 @@
-import { getAlbumImageUrl, getGalleryImageUrl, getSingleImageUrl } from "./api"
+import { getAlbumImageUrl, getGalleryImageUrl, getSingleImageUrl, imgurApi } from "./api"
 import { IMGUR_ALBUM_URL, TEXT_WRAPPER_EXPRESSION, URL_WRAPPER_EXPRESSION } from "./constants"
 import { FormattedSubmission, SubmissionUrlType } from "./contracts"
 
@@ -28,7 +28,7 @@ export const generateUrlType = (title: string, imageUrl: string): SubmissionUrlT
   const urlEndpoint = imageUrl.split('/').pop()
   const extension = urlEndpoint.split('.').pop()
 
-  if (checkForValidImageExtension(extension)) return 'direct-link'
+  if (checkForValidImageExtension(extension) || imageUrl.includes('i.imgur.com')) return 'direct-link'
   if (imageUrl.includes('imgur.com/gallery/')) return 'imgur-gallery'
   if (imageUrl.includes('imgur.com/a/')) return 'imgur-album'
   if (imageUrl.includes('imgur.com/')) return 'imgur-direct'

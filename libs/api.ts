@@ -64,10 +64,10 @@ export const getPostDetail = async (postId: string): Promise<ContestDetailRespon
   const submissions = children.map(({ data }) => data)
     .map((comment: any) => ({
       id: comment.id,
-      author: comment.author,
-      body: comment.body,
-      permalink: comment.permalink,
-      upvoteCount: comment.ups,
+      author: comment.author ?? null,
+      body: comment.body ?? null,
+      permalink: comment.permalink ?? null,
+      upvoteCount: comment.ups ?? null,
     }))
     .slice(1)
 

@@ -47,6 +47,11 @@ export default function Home() {
       <PageContainer>
         <PageHeader>
           <PageTitle><Link href="/">/r/PhotoshopBattles</Link></PageTitle>
+          <button type="button" onClick={() => {
+    throw new Error("Sentry Frontend Error");
+}}>
+    Throw error
+</button>
           <div className="flex space-x-2">
             <a
               type="button"
