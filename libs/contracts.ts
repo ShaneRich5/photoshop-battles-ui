@@ -29,6 +29,8 @@ export interface FormattedSubmission extends Submission {
 
 export type ContestListResponse = Contest[]
 
+export type PaginatedContests = Contest[][]
+
 export interface ContestDetailResponse {
   contest: Contest
   submissions: Submission[]
