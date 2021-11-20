@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import Layout from 'components/Layout'
-import { getContestList } from 'libs/api'
+import { getContestList, getPrefetchContestList } from 'libs/api'
 import { QueryKey, SCROLL_EVENT } from 'libs/constants'
 import PageTitle from 'components/PageTitle'
 import RedditIcon from 'components/RedditIcon'
@@ -16,7 +16,7 @@ import LoadingIndicator from 'components/LoadingIndicator'
 export async function getServerSideProps() {
   const queryClient = new QueryClient()
 
-  await queryClient.prefetchQuery(QueryKey.CONTEST_LIST, getContestList)
+  await queryClient.prefetchQuery(QueryKey.CONTEST_LIST, getPrefetchContestList)
 
   return {
     props: {
