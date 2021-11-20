@@ -72,6 +72,7 @@ export default function Home() {
           className="disabled:opacity-50 disabled:cursor-not-allowed my-4 w-full h-12 transition-colors duration-150 focus:shadow-outline bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded"
           ref={loadMoreButtonRef}
           disabled={isFetching || isFetchingNextPage}
+          onClick={() => fetchNextPage}
         >
           Load More
         </button>
