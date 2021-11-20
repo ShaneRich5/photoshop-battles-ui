@@ -74,3 +74,10 @@ export function debounce(func: Function, wait: number, immediate = null) {
 		if (callNow) func.apply(context, args)
 	}
 }
+
+export const scrollToTop = () => {
+  window.scrollTo({
+    top: 0,
+    behavior: 'smooth',
+  })
+}
