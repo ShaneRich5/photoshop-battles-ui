@@ -11,9 +11,6 @@ export const redditApi = axios.create({
 
 export const imgurApi = axios.create({
   baseURL: 'https://api.imgur.com/3',
-  headers: {
-    'Authorization': `Client-ID ${process.env.NEXT_PUBLIC_IMGUR_CLIENT_ID}`,
-  }
 })
 
 export const getAlbumImageUrl = async (albumHash: string): Promise<string> => {
