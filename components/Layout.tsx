@@ -18,6 +18,7 @@ const Layout: React.FC = ({ children }) => {
         <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5" key="mask-icon"/>
         <meta name="msapplication-TileColor" content="#da532c" key="ms-tile-color"/>
         <meta name="theme-color" content="#ffffff" key="theme-color"/>
+        <script async data-api="/_hive" src="/bee.js"></script>
       </Head>
       <div className="pb-6">
         {children}

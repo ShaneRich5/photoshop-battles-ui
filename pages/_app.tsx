@@ -9,8 +9,8 @@ export default function App({ Component, pageProps }) {
 
   useEffect(() => {
     splitbee.init({
-      apiUrl: '/sb-api',
-      scriptUrl: '/sb.js'
+      scriptUrl: "/bee.js",
+      apiUrl: "/_hive",
     })
   }, [])
 
