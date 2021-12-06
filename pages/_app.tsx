@@ -1,10 +1,15 @@
 import 'tailwindcss/tailwind.css'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import splitbee from '@splitbee/web'
 import { Hydrate, QueryClient, QueryClientProvider } from 'react-query'
 
 
 export default function App({ Component, pageProps }) {
   const [queryClient] = useState(() => new QueryClient())
+
+  useEffect(() => {
+    splitbee.init()
+  }, [])
 
   return (
     <QueryClientProvider client={queryClient}>
