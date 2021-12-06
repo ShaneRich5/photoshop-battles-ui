@@ -8,7 +8,10 @@ export default function App({ Component, pageProps }) {
   const [queryClient] = useState(() => new QueryClient())
 
   useEffect(() => {
-    splitbee.init()
+    splitbee.init({
+      apiUrl: '/sb-api',
+      scriptUrl: '/sb.js'
+    })
   }, [])
 
   return (
